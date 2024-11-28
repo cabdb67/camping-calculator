@@ -2,23 +2,29 @@
 function getConfig() {
     return JSON.parse(localStorage.getItem('campingConfig')) || {
         saisons: {
-            BASSE: {
-                debut: '01-01',
-                fin: '06-30',
-                prixAdulte: 7,
+            PRINTEMPS: {
+                debut: '03-20',
+                fin: '06-20',
+                prixAdulte: 8,
                 prixEnfant: 4
             },
-            MOYENNE: {
-                debut: '07-01',
-                fin: '07-14',
-                prixAdulte: 9,
-                prixEnfant: 5
-            },
-            HAUTE: {
-                debut: '07-15',
-                fin: '08-31',
+            ETE: {
+                debut: '06-21',
+                fin: '09-20',
                 prixAdulte: 12,
                 prixEnfant: 6
+            },
+            AUTOMNE: {
+                debut: '09-21',
+                fin: '12-20',
+                prixAdulte: 8,
+                prixEnfant: 4
+            },
+            HIVER: {
+                debut: '12-21',
+                fin: '03-19',
+                prixAdulte: 7,
+                prixEnfant: 3.5
             }
         },
         services: {
@@ -29,7 +35,7 @@ function getConfig() {
         forfaits: {
             weekend: {
                 duree: 2,
-                reduction: 10, // réduction en pourcentage
+                reduction: 10,
                 electriciteIncluse: true
             },
             semaine: {
@@ -52,12 +58,15 @@ function getSaison(date) {
     const dateObj = new Date(date);
     const moisJour = `${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
     
-    if (moisJour >= config.saisons.HAUTE.debut && moisJour <= config.saisons.HAUTE.fin) {
-        return config.saisons.HAUTE;
-    } else if (moisJour >= config.saisons.MOYENNE.debut && moisJour <= config.saisons.MOYENNE.fin) {
-        return config.saisons.MOYENNE;
+    // Gestion spéciale pour l'hiver qui chevauche deux années
+    if (moisJour >= config.saisons.HIVER.debut || moisJour <= config.saisons.HIVER.fin) {
+        return config.saisons.HIVER;
+    } else if (moisJour >= config.saisons.PRINTEMPS.debut && moisJour <= config.saisons.PRINTEMPS.fin) {
+        return config.saisons.PRINTEMPS;
+    } else if (moisJour >= config.saisons.ETE.debut && moisJour <= config.saisons.ETE.fin) {
+        return config.saisons.ETE;
     } else {
-        return config.saisons.BASSE;
+        return config.saisons.AUTOMNE;
     }
 }
 

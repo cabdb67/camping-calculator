@@ -100,48 +100,39 @@
         
         <div class="tarifs-grid">
             <div class="tarif-item">
-                <h3>Basse Saison</h3>
-                <label>Date de début (JJ-MM):</label>
-                <input type="text" id="basseSaisonDebut" pattern="[0-9]{2}-[0-9]{2}" placeholder="01-01">
-                
-                <label>Date de fin (JJ-MM):</label>
-                <input type="text" id="basseSaisonFin" pattern="[0-9]{2}-[0-9]{2}" placeholder="30-06">
-                
+                <h3>Printemps (20/03 - 20/06)</h3>
                 <label>Prix adulte (€):</label>
-                <input type="number" id="basseSaisonAdulte" min="0" step="0.5">
+                <input type="number" id="printempsAdulte" min="0" step="0.5">
                 
                 <label>Prix enfant (€):</label>
-                <input type="number" id="basseSaisonEnfant" min="0" step="0.5">
+                <input type="number" id="printempsEnfant" min="0" step="0.5">
             </div>
 
             <div class="tarif-item">
-                <h3>Moyenne Saison</h3>
-                <label>Date de début (JJ-MM):</label>
-                <input type="text" id="moyenneSaisonDebut" pattern="[0-9]{2}-[0-9]{2}" placeholder="01-07">
-                
-                <label>Date de fin (JJ-MM):</label>
-                <input type="text" id="moyenneSaisonFin" pattern="[0-9]{2}-[0-9]{2}" placeholder="14-07">
-                
+                <h3>Été (21/06 - 20/09)</h3>
                 <label>Prix adulte (€):</label>
-                <input type="number" id="moyenneSaisonAdulte" min="0" step="0.5">
+                <input type="number" id="eteAdulte" min="0" step="0.5">
                 
                 <label>Prix enfant (€):</label>
-                <input type="number" id="moyenneSaisonEnfant" min="0" step="0.5">
+                <input type="number" id="eteEnfant" min="0" step="0.5">
             </div>
 
             <div class="tarif-item">
-                <h3>Haute Saison</h3>
-                <label>Date de début (JJ-MM):</label>
-                <input type="text" id="hauteSaisonDebut" pattern="[0-9]{2}-[0-9]{2}" placeholder="15-07">
-                
-                <label>Date de fin (JJ-MM):</label>
-                <input type="text" id="hauteSaisonFin" pattern="[0-9]{2}-[0-9]{2}" placeholder="31-08">
-                
+                <h3>Automne (21/09 - 20/12)</h3>
                 <label>Prix adulte (€):</label>
-                <input type="number" id="hauteSaisonAdulte" min="0" step="0.5">
+                <input type="number" id="automneAdulte" min="0" step="0.5">
                 
                 <label>Prix enfant (€):</label>
-                <input type="number" id="hauteSaisonEnfant" min="0" step="0.5">
+                <input type="number" id="automneEnfant" min="0" step="0.5">
+            </div>
+
+            <div class="tarif-item">
+                <h3>Hiver (21/12 - 19/03)</h3>
+                <label>Prix adulte (€):</label>
+                <input type="number" id="hiverAdulte" min="0" step="0.5">
+                
+                <label>Prix enfant (€):</label>
+                <input type="number" id="hiverEnfant" min="0" step="0.5">
             </div>
         </div>
     </div>
@@ -233,23 +224,29 @@
         function chargerConfiguration() {
             const config = JSON.parse(localStorage.getItem('campingConfig')) || {
                 saisons: {
-                    BASSE: {
-                        debut: '01-01',
-                        fin: '06-30',
+                    PRINTEMPS: {
+                        debut: '20-03',
+                        fin: '20-06',
                         prixAdulte: 7,
                         prixEnfant: 4
                     },
-                    MOYENNE: {
-                        debut: '07-01',
-                        fin: '07-14',
+                    ETE: {
+                        debut: '21-06',
+                        fin: '20-09',
                         prixAdulte: 9,
                         prixEnfant: 5
                     },
-                    HAUTE: {
-                        debut: '07-15',
-                        fin: '08-31',
-                        prixAdulte: 12,
-                        prixEnfant: 6
+                    AUTOMNE: {
+                        debut: '21-09',
+                        fin: '20-12',
+                        prixAdulte: 8,
+                        prixEnfant: 4
+                    },
+                    HIVER: {
+                        debut: '21-12',
+                        fin: '19-03',
+                        prixAdulte: 6,
+                        prixEnfant: 3
                     }
                 },
                 services: {
@@ -281,20 +278,17 @@
             };
 
             // Remplir les champs avec les valeurs existantes
-            document.getElementById('basseSaisonDebut').value = config.saisons.BASSE.debut;
-            document.getElementById('basseSaisonFin').value = config.saisons.BASSE.fin;
-            document.getElementById('basseSaisonAdulte').value = config.saisons.BASSE.prixAdulte;
-            document.getElementById('basseSaisonEnfant').value = config.saisons.BASSE.prixEnfant;
+            document.getElementById('printempsAdulte').value = config.saisons.PRINTEMPS.prixAdulte;
+            document.getElementById('printempsEnfant').value = config.saisons.PRINTEMPS.prixEnfant;
 
-            document.getElementById('moyenneSaisonDebut').value = config.saisons.MOYENNE.debut;
-            document.getElementById('moyenneSaisonFin').value = config.saisons.MOYENNE.fin;
-            document.getElementById('moyenneSaisonAdulte').value = config.saisons.MOYENNE.prixAdulte;
-            document.getElementById('moyenneSaisonEnfant').value = config.saisons.MOYENNE.prixEnfant;
+            document.getElementById('eteAdulte').value = config.saisons.ETE.prixAdulte;
+            document.getElementById('eteEnfant').value = config.saisons.ETE.prixEnfant;
 
-            document.getElementById('hauteSaisonDebut').value = config.saisons.HAUTE.debut;
-            document.getElementById('hauteSaisonFin').value = config.saisons.HAUTE.fin;
-            document.getElementById('hauteSaisonAdulte').value = config.saisons.HAUTE.prixAdulte;
-            document.getElementById('hauteSaisonEnfant').value = config.saisons.HAUTE.prixEnfant;
+            document.getElementById('automneAdulte').value = config.saisons.AUTOMNE.prixAdulte;
+            document.getElementById('automneEnfant').value = config.saisons.AUTOMNE.prixEnfant;
+
+            document.getElementById('hiverAdulte').value = config.saisons.HIVER.prixAdulte;
+            document.getElementById('hiverEnfant').value = config.saisons.HIVER.prixEnfant;
 
             document.getElementById('prixElectricite').value = config.services.electricite;
             document.getElementById('prixVehicule').value = config.services.vehicule;
@@ -320,23 +314,29 @@
         function sauvegarderConfiguration() {
             const config = {
                 saisons: {
-                    BASSE: {
-                        debut: document.getElementById('basseSaisonDebut').value,
-                        fin: document.getElementById('basseSaisonFin').value,
-                        prixAdulte: parseFloat(document.getElementById('basseSaisonAdulte').value),
-                        prixEnfant: parseFloat(document.getElementById('basseSaisonEnfant').value)
+                    PRINTEMPS: {
+                        debut: '20-03',
+                        fin: '20-06',
+                        prixAdulte: parseFloat(document.getElementById('printempsAdulte').value),
+                        prixEnfant: parseFloat(document.getElementById('printempsEnfant').value)
                     },
-                    MOYENNE: {
-                        debut: document.getElementById('moyenneSaisonDebut').value,
-                        fin: document.getElementById('moyenneSaisonFin').value,
-                        prixAdulte: parseFloat(document.getElementById('moyenneSaisonAdulte').value),
-                        prixEnfant: parseFloat(document.getElementById('moyenneSaisonEnfant').value)
+                    ETE: {
+                        debut: '21-06',
+                        fin: '20-09',
+                        prixAdulte: parseFloat(document.getElementById('eteAdulte').value),
+                        prixEnfant: parseFloat(document.getElementById('eteEnfant').value)
                     },
-                    HAUTE: {
-                        debut: document.getElementById('hauteSaisonDebut').value,
-                        fin: document.getElementById('hauteSaisonFin').value,
-                        prixAdulte: parseFloat(document.getElementById('hauteSaisonAdulte').value),
-                        prixEnfant: parseFloat(document.getElementById('hauteSaisonEnfant').value)
+                    AUTOMNE: {
+                        debut: '21-09',
+                        fin: '20-12',
+                        prixAdulte: parseFloat(document.getElementById('automneAdulte').value),
+                        prixEnfant: parseFloat(document.getElementById('automneEnfant').value)
+                    },
+                    HIVER: {
+                        debut: '21-12',
+                        fin: '19-03',
+                        prixAdulte: parseFloat(document.getElementById('hiverAdulte').value),
+                        prixEnfant: parseFloat(document.getElementById('hiverEnfant').value)
                     }
                 },
                 services: {
