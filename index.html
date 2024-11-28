@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Devis - Camping</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>Calculez le prix de votre séjour</h1>
+        
+        <form id="devisForm" class="devis-form">
+            <div class="form-group">
+                <label for="dateArrivee">Date d'arrivée :</label>
+                <input type="date" id="dateArrivee" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dateDepart">Date de départ :</label>
+                <input type="date" id="dateDepart" required>
+            </div>
+
+            <div class="form-group">
+                <label for="adultes">Nombre d'adultes :</label>
+                <input type="number" id="adultes" min="1" value="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="enfants">Nombre d'enfants (- 12 ans) :</label>
+                <input type="number" id="enfants" min="0" value="0">
+            </div>
+
+            <div class="form-group services">
+                <h3>Services supplémentaires</h3>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="electricite">
+                    <label for="electricite">Électricité</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="vehicule">
+                    <label for="vehicule">Véhicule supplémentaire</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="animal">
+                    <label for="animal">Animal de compagnie</label>
+                </div>
+            </div>
+
+            <button type="submit" class="calculate-btn">Calculer le devis</button>
+        </form>
+
+        <div id="resultat" class="resultat hidden">
+            <h2>Votre devis</h2>
+            <div class="detail-prix">
+                <div class="ligne-prix">
+                    <span>Séjour de base :</span>
+                    <span id="prixBase">0€</span>
+                </div>
+                <div class="ligne-prix">
+                    <span>Services supplémentaires :</span>
+                    <span id="prixServices">0€</span>
+                </div>
+                <div class="ligne-prix total">
+                    <span>Total :</span>
+                    <span id="prixTotal">0€</span>
+                </div>
+            </div>
+            <p class="info-saison">* Les prix varient selon la saison</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
