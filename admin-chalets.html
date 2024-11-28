@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Tarifs Chalets</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Administration - Tarifs Chalets</h1>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <h2>Tarifs de Base</h2>
+                
+                <label>Chalet 4/5 personnes par nuit (Basse Saison) :</label>
+                <input type="number" id="chalet4_bs" min="0" step="0.5">
+                
+                <label>Chalet 4/5 personnes par nuit (Moyenne Saison) :</label>
+                <input type="number" id="chalet4_ms" min="0" step="0.5">
+                
+                <label>Chalet 4/5 personnes par nuit (Haute Saison) :</label>
+                <input type="number" id="chalet4_hs" min="0" step="0.5">
+                
+                <label>Chalet 6/7 personnes par nuit (Basse Saison) :</label>
+                <input type="number" id="chalet6_bs" min="0" step="0.5">
+                
+                <label>Chalet 6/7 personnes par nuit (Moyenne Saison) :</label>
+                <input type="number" id="chalet6_ms" min="0" step="0.5">
+                
+                <label>Chalet 6/7 personnes par nuit (Haute Saison) :</label>
+                <input type="number" id="chalet6_hs" min="0" step="0.5">
+            </div>
+
+            <div class="form-group">
+                <h2>Options</h2>
+                
+                <label>Forfait ménage :</label>
+                <input type="number" id="menage" min="0" step="0.5">
+                
+                <label>Location draps (par lit) :</label>
+                <input type="number" id="draps" min="0" step="0.5">
+
+                <label>Chien par jour :</label>
+                <input type="number" id="chien" min="0" step="0.5">
+            </div>
+
+            <div class="form-group">
+                <h2>Périodes</h2>
+                <div class="saison-dates">
+                    <div>
+                        <h3>Basse Saison</h3>
+                        <label>Du 01/01 au 31/03</label>
+                        <label>Du 01/10 au 31/12</label>
+                    </div>
+                    <div>
+                        <h3>Moyenne Saison</h3>
+                        <label>Du 01/04 au 30/06</label>
+                        <label>Du 01/09 au 30/09</label>
+                    </div>
+                    <div>
+                        <h3>Haute Saison</h3>
+                        <label>Du 01/07 au 31/08</label>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="saveConfig()" class="calculate-btn">Enregistrer la configuration</button>
+
+            <div id="saveMessage" class="info hidden">Configuration enregistrée avec succès!</div>
+        </div>
+    </div>
+
+    <script>
+        function getDefaultConfig() {
+            return {
+                chalets: {
+                    "4/5": {
+                        basseSaison: 75,
+                        moyenneSaison: 85,
+                        hauteSaison: 95
+                    },
+                    "6/7": {
+                        basseSaison: 85,
+                        moyenneSaison: 95,
+                        hauteSaison: 105
+                    },
+                    options: {
+                        menage: 50,
+                        draps: 10,
+                        chien: 5
+                    }
+                }
+            };
+        }
+
+        function loadConfig() {
+            const config = JSON.parse(localStorage.getItem('chaletConfig')) || getDefaultConfig();
+            
+            document.getElementById('chalet4_bs').value = config.chalets["4/5"].basseSaison;
+            document.getElementById('chalet4_ms').value = config.chalets["4/5"].moyenneSaison;
+            document.getElementById('chalet4_hs').value = config.chalets["4/5"].hauteSaison;
+            
+            document.getElementById('chalet6_bs').value = config.chalets["6/7"].basseSaison;
+            document.getElementById('chalet6_ms').value = config.chalets["6/7"].moyenneSaison;
+            document.getElementById('chalet6_hs').value = config.chalets["6/7"].hauteSaison;
+            
+            document.getElementById('menage').value = config.chalets.options.menage;
+            document.getElementById('draps').value = config.chalets.options.draps;
+            document.getElementById('chien').value = config.chalets.options.chien;
+        }
+
+        function saveConfig() {
+            const config = {
+                chalets: {
+                    "4/5": {
+                        basseSaison: parseFloat(document.getElementById('chalet4_bs').value) || 0,
+                        moyenneSaison: parseFloat(document.getElementById('chalet4_ms').value) || 0,
+                        hauteSaison: parseFloat(document.getElementById('chalet4_hs').value) || 0
+                    },
+                    "6/7": {
+                        basseSaison: parseFloat(document.getElementById('chalet6_bs').value) || 0,
+                        moyenneSaison: parseFloat(document.getElementById('chalet6_ms').value) || 0,
+                        hauteSaison: parseFloat(document.getElementById('chalet6_hs').value) || 0
+                    },
+                    options: {
+                        menage: parseFloat(document.getElementById('menage').value) || 0,
+                        draps: parseFloat(document.getElementById('draps').value) || 0,
+                        chien: parseFloat(document.getElementById('chien').value) || 0
+                    }
+                }
+            };
+
+            localStorage.setItem('chaletConfig', JSON.stringify(config));
+            
+            const saveMessage = document.getElementById('saveMessage');
+            saveMessage.classList.remove('hidden');
+            setTimeout(() => saveMessage.classList.add('hidden'), 3000);
+        }
+
+        // Charger la configuration au démarrage
+        document.addEventListener('DOMContentLoaded', loadConfig);
+    </script>
+</body>
+</html>

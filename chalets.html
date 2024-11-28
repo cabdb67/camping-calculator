@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur - Chalets CAMPING</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur de Prix - Chalets</h1>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <h2>Dates du séjour</h2>
+                <div class="dates-group">
+                    <div>
+                        <label for="dateArrivee">Date d'arrivée :</label>
+                        <input type="date" id="dateArrivee" required>
+                    </div>
+                    <div>
+                        <label for="dateDepart">Date de départ :</label>
+                        <input type="date" id="dateDepart" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h2>Type de Chalet</h2>
+                <div class="radio-group">
+                    <div>
+                        <input type="radio" id="chalet4" name="typeChalet" value="4/5" checked>
+                        <label for="chalet4">Chalet 4/5 personnes</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="chalet6" name="typeChalet" value="6/7">
+                        <label for="chalet6">Chalet 6/7 personnes</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h2>Nombre de personnes</h2>
+                <div class="number-input">
+                    <label for="nbPersonnes">Nombre total de personnes :</label>
+                    <input type="number" id="nbPersonnes" min="1" max="7" value="1" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h2>Options</h2>
+                <div class="checkbox-group">
+                    <div>
+                        <input type="checkbox" id="optionMenage">
+                        <label for="optionMenage">Forfait ménage</label>
+                    </div>
+                    <div>
+                        <label for="nbDraps">Location draps (nombre de lits) :</label>
+                        <input type="number" id="nbDraps" min="0" max="7" value="0">
+                    </div>
+                    <div>
+                        <label for="nbChiens">Nombre de chiens :</label>
+                        <input type="number" id="nbChiens" min="0" max="2" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="calculerPrix()" class="calculate-btn">Calculer le prix</button>
+
+            <div id="result" class="result hidden">
+                <h2>Devis</h2>
+                <div id="datesSejour"></div>
+                <div id="detailPrix"></div>
+                <div id="prixTotal" class="total-price"></div>
+            </div>
+
+            <div id="errorMessage" class="error hidden"></div>
+        </div>
+    </div>
+
+    <script src="chalets.js"></script>
+</body>
+</html>

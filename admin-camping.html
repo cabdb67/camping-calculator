@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Emplacements Nus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #successMessage {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .info {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Configuration des Tarifs - Emplacements Nus</h1>
+    
+    <div class="info">
+        Note : Maximum 6 personnes par emplacement
+    </div>
+
+    <div class="form-group">
+        <h2>Tarifs de Base</h2>
+        <label>Forfait base (1-2 personnes) par jour :</label>
+        <input type="number" id="forfaitBase" min="0" step="0.5">
+        
+        <label>Personne supplémentaire par jour :</label>
+        <input type="number" id="personneSupplementaire" min="0" step="0.5">
+        
+        <label>Électricité par jour :</label>
+        <input type="number" id="electricite" min="0" step="0.5">
+
+        <label>Chien par jour :</label>
+        <input type="number" id="chien" min="0" step="0.5">
+
+        <label>Tarif randonneur (par personne et par jour) :</label>
+        <input type="number" id="randonneur" min="0" step="0.5">
+
+        <label>Recharge vélo électrique par jour :</label>
+        <input type="number" id="rechargeVelo" min="0" step="0.5">
+    </div>
+
+    <div class="form-group">
+        <h2>Tarifs Enfants</h2>
+        <label>Enfants 0-2 ans :</label>
+        <input type="number" id="enfants0_2" min="0" step="0.5">
+        
+        <label>Enfants 3-12 ans :</label>
+        <input type="number" id="enfants3_12" min="0" step="0.5">
+        
+        <label>Enfants 13-17 ans :</label>
+        <input type="number" id="enfants13_17" min="0" step="0.5">
+    </div>
+
+    <button onclick="sauvegarderConfiguration()">Sauvegarder</button>
+    <div id="successMessage">Configuration sauvegardée !</div>
+
+    <script>
+        // Afficher les valeurs actuelles au chargement
+        window.onload = function() {
+            const config = JSON.parse(localStorage.getItem('campingConfig')) || {
+                emplacementNu: {
+                    forfaitBase: 20,
+                    enfants: {
+                        "0-2": 0,
+                        "3-12": 5,
+                        "13-17": 7
+                    },
+                    personneSupplementaire: 10,
+                    electricite: 5,
+                    chien: 2,
+                    randonneur: 0,
+                    rechargeVelo: 0
+                }
+            };
+
+            // Remplir les champs avec les valeurs existantes
+            document.getElementById('forfaitBase').value = config.emplacementNu.forfaitBase;
+            document.getElementById('personneSupplementaire').value = config.emplacementNu.personneSupplementaire;
+            document.getElementById('electricite').value = config.emplacementNu.electricite;
+            document.getElementById('chien').value = config.emplacementNu.chien;
+            document.getElementById('randonneur').value = config.emplacementNu.randonneur;
+            document.getElementById('rechargeVelo').value = config.emplacementNu.rechargeVelo;
+            document.getElementById('enfants0_2').value = config.emplacementNu.enfants["0-2"];
+            document.getElementById('enfants3_12').value = config.emplacementNu.enfants["3-12"];
+            document.getElementById('enfants13_17').value = config.emplacementNu.enfants["13-17"];
+        };
+
+        // Sauvegarder la configuration
+        function sauvegarderConfiguration() {
+            const config = {
+                emplacementNu: {
+                    forfaitBase: parseFloat(document.getElementById('forfaitBase').value) || 0,
+                    enfants: {
+                        "0-2": parseFloat(document.getElementById('enfants0_2').value) || 0,
+                        "3-12": parseFloat(document.getElementById('enfants3_12').value) || 0,
+                        "13-17": parseFloat(document.getElementById('enfants13_17').value) || 0
+                    },
+                    personneSupplementaire: parseFloat(document.getElementById('personneSupplementaire').value) || 0,
+                    electricite: parseFloat(document.getElementById('electricite').value) || 0,
+                    chien: parseFloat(document.getElementById('chien').value) || 0,
+                    randonneur: parseFloat(document.getElementById('randonneur').value) || 0,
+                    rechargeVelo: parseFloat(document.getElementById('rechargeVelo').value) || 0
+                }
+            };
+
+            // Sauvegarder dans localStorage
+            localStorage.setItem('campingConfig', JSON.stringify(config));
+            console.log('Configuration sauvegardée:', config);
+
+            // Afficher le message de succès
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

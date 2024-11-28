@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur - Emplacements Nus CAMPING</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur - Emplacements Nus CAMPING</h1>
+        
+        <div class="form-container">
+            <form id="campingForm" class="devis-form">
+                <div class="form-group">
+                    <label for="dateArrivee">Date d'arrivée :</label>
+                    <input type="date" id="dateArrivee" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateDepart">Date de départ :</label>
+                    <input type="date" id="dateDepart" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="randonneur">
+                        <label for="randonneur">Tarif randonneur</label>
+                        <div class="info-text">(Uniquement pour une personne seule - emplacements spéciaux)</div>
+                    </div>
+                </div>
+
+                <div id="options-standard">
+                    <div class="form-group">
+                        <label for="adultes">Forfait emplacement 1 ou 2 pers. + 1 véhicule :</label>
+                        <input type="number" id="adultes" min="1" max="2" value="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="enfants0_2">Enfants 0-2 ans (par jour) :</label>
+                        <input type="number" id="enfants0_2" min="0" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="enfants3_12">Enfants 3-12 ans (par jour) :</label>
+                        <input type="number" id="enfants3_12" min="0" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="enfants13_17">Enfants 13-17 ans (par jour) :</label>
+                        <input type="number" id="enfants13_17" min="0" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="personnesSupp">Personnes supplémentaires (par jour) :</label>
+                        <input type="number" id="personnesSupp" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="options-additionnelles">
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="electricite">
+                            <label for="electricite">Électricité (par jour)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="rechargeVelo">
+                            <label for="rechargeVelo">Recharge vélo électrique (par jour)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="chiens">Nombre de chiens (maxi 2) (par jour) :</label>
+                        <input type="number" id="chiens" min="0" max="2" value="0">
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculer le prix</button>
+            </form>
+
+            <div id="resultat" class="hidden">
+                <h3>Détail du devis</h3>
+                <div class="dates-sejour">
+                    <p>Séjour du <span id="dateDebutSejour"></span> au <span id="dateFinSejour"></span></p>
+                    <p>Durée : <span id="nombreNuits"></span> nuit(s)</p>
+                </div>
+                <div class="detail-prix">
+                    <div id="detail-base">
+                        <span>Forfait emplacement (par jour) :</span>
+                        <span id="prixBase">0.00€</span>
+                    </div>
+                    <div id="detail-enfants">
+                        <span>Enfants (par jour) :</span>
+                        <span id="prixEnfants">0.00€</span>
+                    </div>
+                    <div id="detail-personnes-supp">
+                        <span>Personnes supplémentaires (par jour) :</span>
+                        <span id="prixPersonnesSupp">0.00€</span>
+                    </div>
+                    <div id="detail-electricite">
+                        <span>Électricité (par jour) :</span>
+                        <span id="prixElectricite">0.00€</span>
+                    </div>
+                    <div id="detail-recharge-velo">
+                        <span>Recharge vélo électrique (par jour) :</span>
+                        <span id="prixRechargeVelo">0.00€</span>
+                    </div>
+                    <div id="detail-chiens">
+                        <span>Chiens (par jour) :</span>
+                        <span id="prixChiens">0.00€</span>
+                    </div>
+                    <div id="detail-taxe">
+                        <span>Taxe de séjour (0.22€ par nuit et par adulte) :</span>
+                        <span id="prixTaxe">0.00€</span>
+                    </div>
+                </div>
+                <div id="messageEmplacements" class="warning hidden">
+                    Pour votre groupe, nous vous recommandons <span id="nbEmplacements">2</span> emplacements
+                </div>
+                <div id="prixParEmplacement" class="info hidden">
+                    Prix par emplacement : <span id="prixDivise">0.00€</span>
+                </div>
+                <div class="prix-total">
+                    <span>Prix total :</span>
+                    <span id="prixTotal">0.00€</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="camping.js"></script>
+</body>
+</html>
