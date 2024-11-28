@@ -25,6 +25,23 @@ function getConfig() {
             electricite: 6,
             vehicule: 3,
             animal: 2
+        },
+        forfaits: {
+            weekend: {
+                duree: 2,
+                reduction: 10, // réduction en pourcentage
+                electriciteIncluse: true
+            },
+            semaine: {
+                duree: 7,
+                reduction: 15,
+                electriciteIncluse: true
+            },
+            quinzaine: {
+                duree: 14,
+                reduction: 20,
+                electriciteIncluse: true
+            }
         }
     };
 }
@@ -59,6 +76,7 @@ function calculerPrix() {
     const dateDepart = document.getElementById('dateDepart').value;
     const nbAdultes = parseInt(document.getElementById('adultes').value);
     const nbEnfants = parseInt(document.getElementById('enfants').value);
+    const forfaitChoisi = document.querySelector('input[name="forfait"]:checked').value;
     
     if (!dateArrivee || !dateDepart || dateArrivee >= dateDepart) {
         alert('Veuillez vérifier vos dates de séjour');
@@ -69,11 +87,24 @@ function calculerPrix() {
     const saison = getSaison(dateArrivee);
     
     // Calcul du prix de base
-    const prixBase = (nbAdultes * saison.prixAdulte + nbEnfants * saison.prixEnfant) * nombreJours;
+    let prixBase = (nbAdultes * saison.prixAdulte + nbEnfants * saison.prixEnfant) * nombreJours;
+    
+    // Application du forfait si sélectionné
+    if (forfaitChoisi !== 'aucun') {
+        const forfait = config.forfaits[forfaitChoisi];
+        if (nombreJours === forfait.duree) {
+            // Appliquer la réduction du forfait
+            prixBase = prixBase * (1 - forfait.reduction / 100);
+        } else {
+            alert('La durée de votre séjour ne correspond pas au forfait sélectionné');
+            return;
+        }
+    }
     
     // Calcul des services supplémentaires
     let prixServices = 0;
-    if (document.getElementById('electricite').checked) {
+    if (document.getElementById('electricite').checked && 
+        !(forfaitChoisi !== 'aucun' && config.forfaits[forfaitChoisi].electriciteIncluse)) {
         prixServices += config.services.electricite * nombreJours;
     }
     if (document.getElementById('vehicule').checked) {

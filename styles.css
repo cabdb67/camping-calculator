@@ -69,11 +69,32 @@ input[type="number"] {
     color: var(--primary-color);
 }
 
-.checkbox-group {
+.checkbox-group, .radio-group {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+.forfaits {
+    background-color: #f8f8f8;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+}
+
+.forfaits h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.radio-group label {
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+    cursor: pointer;
 }
 
 .calculate-btn {
