@@ -12,7 +12,7 @@ function getConfig() {
             electricite: 5,
             chien: 2,
             randonneur: 8,
-            rechargeVelo: 2 // Ajout du tarif pour la recharge vélo
+            rechargeVelo: 2
         }
     };
 }
@@ -25,26 +25,6 @@ function getNombreJours(dateDebut, dateFin) {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 }
 
-// Vérification du nombre d'emplacements nécessaires
-function verifierNombrePersonnes(nbAdultes, nbEnfants0_2, nbEnfants3_12, nbEnfants13_17, nbPersonnesSupp) {
-    const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
-    const messageEmplacements = document.getElementById('messageEmplacements');
-    const prixParEmplacement = document.getElementById('prixParEmplacement');
-    const nbEmplacements = document.getElementById('nbEmplacements');
-    
-    if (totalPersonnes > 6) {
-        const nombreEmplacements = Math.ceil(totalPersonnes / 6);
-        messageEmplacements.classList.remove('hidden');
-        prixParEmplacement.classList.remove('hidden');
-        nbEmplacements.textContent = nombreEmplacements;
-        return nombreEmplacements;
-    } else {
-        messageEmplacements.classList.add('hidden');
-        prixParEmplacement.classList.add('hidden');
-        return 1;
-    }
-}
-
 // Formatage de la date
 function formatDate(date) {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -55,16 +35,16 @@ function formatDate(date) {
 document.getElementById('randonneur').addEventListener('change', function(e) {
     const optionsStandard = document.getElementById('options-standard');
     if (this.checked) {
-        optionsStandard.style.display = 'none';
-        // Réinitialiser les valeurs
+        optionsStandard.classList.add('hidden');
         document.getElementById('adultes').value = '1';
         document.getElementById('enfants0_2').value = '0';
         document.getElementById('enfants3_12').value = '0';
         document.getElementById('enfants13_17').value = '0';
         document.getElementById('personnesSupp').value = '0';
     } else {
-        optionsStandard.style.display = 'block';
+        optionsStandard.classList.remove('hidden');
     }
+    calculerPrix();
 });
 
 // Calcul du prix total
@@ -75,7 +55,7 @@ function calculerPrix() {
     const estRandonneur = document.getElementById('randonneur').checked;
     const electricite = document.getElementById('electricite').checked;
     const rechargeVelo = document.getElementById('rechargeVelo').checked;
-    const nbChiens = parseInt(document.getElementById('chiens').value);
+    const nbChiens = parseInt(document.getElementById('chiens').value) || 0;
     
     if (!dateArrivee || !dateDepart || dateArrivee >= dateDepart) {
         alert('Veuillez vérifier vos dates de séjour');
@@ -103,16 +83,31 @@ function calculerPrix() {
         prixBase = config.emplacementNu.randonneur * nombreJours;
         prixTotal = prixBase;
         nbAdultes = 1; // Un seul adulte pour le tarif randonneur
+        
+        // Cacher les messages d'emplacements pour les randonneurs
+        document.getElementById('messageEmplacements').classList.add('hidden');
+        document.getElementById('prixParEmplacement').classList.add('hidden');
     } else {
         // Calcul standard
-        nbAdultes = parseInt(document.getElementById('adultes').value);
-        const nbEnfants0_2 = parseInt(document.getElementById('enfants0_2').value);
-        const nbEnfants3_12 = parseInt(document.getElementById('enfants3_12').value);
-        const nbEnfants13_17 = parseInt(document.getElementById('enfants13_17').value);
-        const nbPersonnesSupp = parseInt(document.getElementById('personnesSupp').value);
+        nbAdultes = parseInt(document.getElementById('adultes').value) || 0;
+        const nbEnfants0_2 = parseInt(document.getElementById('enfants0_2').value) || 0;
+        const nbEnfants3_12 = parseInt(document.getElementById('enfants3_12').value) || 0;
+        const nbEnfants13_17 = parseInt(document.getElementById('enfants13_17').value) || 0;
+        const nbPersonnesSupp = parseInt(document.getElementById('personnesSupp').value) || 0;
 
-        // Vérifier le nombre de personnes et obtenir le nombre d'emplacements nécessaires
-        const nombreEmplacements = verifierNombrePersonnes(nbAdultes, nbEnfants0_2, nbEnfants3_12, nbEnfants13_17, nbPersonnesSupp);
+        // Calcul du nombre total de personnes
+        const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
+        
+        // Gestion du message d'emplacements multiples
+        if (totalPersonnes > 6) {
+            const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
+            document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
+            document.getElementById('messageEmplacements').classList.remove('hidden');
+            document.getElementById('prixParEmplacement').classList.remove('hidden');
+        } else {
+            document.getElementById('messageEmplacements').classList.add('hidden');
+            document.getElementById('prixParEmplacement').classList.add('hidden');
+        }
         
         // Calcul du prix de base (forfait 1-2 personnes)
         prixBase = config.emplacementNu.forfaitBase * nombreJours;
@@ -128,14 +123,6 @@ function calculerPrix() {
         prixPersonnesSupp = nbPersonnesSupp * config.emplacementNu.personneSupplementaire * nombreJours;
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
-
-        // Afficher le prix par emplacement si nécessaire
-        if (nombreEmplacements > 1) {
-            document.getElementById('prixDivise').textContent = (prixTotal / nombreEmplacements).toFixed(2) + '€';
-            document.getElementById('prixParEmplacement').classList.remove('hidden');
-        } else {
-            document.getElementById('prixParEmplacement').classList.add('hidden');
-        }
     }
     
     // Ajout du prix de l'électricité
@@ -151,8 +138,10 @@ function calculerPrix() {
     }
 
     // Ajout du prix des chiens
-    prixChiens = nbChiens * config.emplacementNu.chien * nombreJours;
-    prixTotal += prixChiens;
+    if (nbChiens > 0) {
+        prixChiens = nbChiens * config.emplacementNu.chien * nombreJours;
+        prixTotal += prixChiens;
+    }
 
     // Calcul de la taxe de séjour (0.22€ par nuit et par adulte)
     prixTaxe = 0.22 * nombreJours * nbAdultes;
@@ -169,34 +158,7 @@ function calculerPrix() {
     document.getElementById('prixTotal').textContent = prixTotal.toFixed(2) + '€';
 
     // Afficher le résultat
-    const resultDiv = document.getElementById('result');
-    const datesSejour = document.getElementById('datesSejour');
-    const detailPrix = document.getElementById('detailPrix');
-    const recommandationDiv = document.getElementById('recommandation');
-    
-    // Cacher le message d'erreur s'il était affiché
-    document.getElementById('errorMessage').classList.add('hidden');
-    
-    // Afficher les dates
-    datesSejour.innerHTML = `
-        <p><strong>Arrivée :</strong> ${formatDate(dateArrivee)}</p>
-        <p><strong>Départ :</strong> ${formatDate(dateDepart)}</p>
-        <p><strong>Durée du séjour :</strong> ${nombreJours} nuit${nombreJours > 1 ? 's' : ''}</p>
-    `;
-
-    // Afficher le message de recommandation si nécessaire
-    if (recommandationDiv) {
-        const totalPersonnes = nbAdultes + parseInt(document.getElementById('enfants0_2').value) + parseInt(document.getElementById('enfants3_12').value) + parseInt(document.getElementById('enfants13_17').value) + parseInt(document.getElementById('personnesSupp').value);
-        if (totalPersonnes > 6) {
-            const nbEmplacements = Math.ceil(totalPersonnes / 6);
-            recommandationDiv.innerHTML = `Pour votre groupe, nous vous recommandons ${nbEmplacements} emplacements`;
-            recommandationDiv.classList.remove('hidden');
-        } else {
-            recommandationDiv.classList.add('hidden');
-        }
-    }
-    
-    resultDiv.classList.remove('hidden');
+    document.getElementById('result').classList.remove('hidden');
 }
 
 // Écouteur d'événement pour le formulaire
