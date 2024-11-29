@@ -106,11 +106,18 @@ function calculerPrix() {
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
-        // Calcul du nombre d'emplacements nécessaires (6 personnes max par emplacement)
-        const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
+        // Calcul du nombre de forfaits nécessaires
+        // Chaque forfait inclut 2 personnes, donc on divise par 2 et on arrondit au supérieur
+        const nbForfaits = Math.ceil(totalPersonnes / 2);
         
-        // Le prix de base est multiplié par le nombre d'emplacements nécessaires
-        prixBase = config.emplacementNu.forfaitBase * nombreJours * nbEmplacementsNecessaires;
+        // Nombre de personnes incluses dans les forfaits (2 personnes par forfait)
+        const personnesInclusesDansForfaits = nbForfaits * 2;
+        
+        // Personnes supplémentaires = total - personnes incluses dans les forfaits
+        const personnesSupplementaires = Math.max(0, totalPersonnes - personnesInclusesDansForfaits);
+        
+        // Prix des forfaits
+        prixBase = config.emplacementNu.forfaitBase * nombreJours * nbForfaits;
         
         // Calcul du prix des enfants
         prixEnfants = (
@@ -119,17 +126,25 @@ function calculerPrix() {
             nbEnfants13_17 * config.emplacementNu.enfants["13-17"]
         ) * nombreJours;
         
-        // Calcul du prix des personnes supplémentaires
-        prixPersonnesSupp = nbPersonnesSupp * config.emplacementNu.personneSupplementaire * nombreJours;
+        // Prix des personnes supplémentaires (celles qui dépassent les forfaits)
+        prixPersonnesSupp = personnesSupplementaires * config.emplacementNu.personneSupplementaire * nombreJours;
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
         
-        // Afficher le message de recommandation si plus d'un emplacement est nécessaire
-        if (nbEmplacementsNecessaires > 1) {
-            document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
-            document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacementsNecessaires).toFixed(2) + '€';
+        // Afficher le détail des forfaits
+        const detailForfaits = document.getElementById('detail-forfaits');
+        if (nbForfaits > 1) {
+            document.getElementById('nbEmplacements').textContent = nbForfaits;
+            document.getElementById('prixDivise').textContent = (prixTotal / nbForfaits).toFixed(2) + '€';
             document.getElementById('messageEmplacements').classList.remove('hidden');
             document.getElementById('prixParEmplacement').classList.remove('hidden');
+            
+            // Afficher le détail des forfaits et personnes supplémentaires
+            detailForfaits.classList.remove('hidden');
+            document.getElementById('detailForfaits').textContent = 
+                `${nbForfaits} forfaits (${personnesInclusesDansForfaits} pers. incluses) + ${personnesSupplementaires} pers. supplémentaires`;
+        } else {
+            detailForfaits.classList.add('hidden');
         }
     }
     
