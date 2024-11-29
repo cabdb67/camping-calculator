@@ -169,7 +169,34 @@ function calculerPrix() {
     document.getElementById('prixTotal').textContent = prixTotal.toFixed(2) + '€';
 
     // Afficher le résultat
-    document.getElementById('resultat').classList.remove('hidden');
+    const resultDiv = document.getElementById('result');
+    const datesSejour = document.getElementById('datesSejour');
+    const detailPrix = document.getElementById('detailPrix');
+    const recommandationDiv = document.getElementById('recommandation');
+    
+    // Cacher le message d'erreur s'il était affiché
+    document.getElementById('errorMessage').classList.add('hidden');
+    
+    // Afficher les dates
+    datesSejour.innerHTML = `
+        <p><strong>Arrivée :</strong> ${formatDate(dateArrivee)}</p>
+        <p><strong>Départ :</strong> ${formatDate(dateDepart)}</p>
+        <p><strong>Durée du séjour :</strong> ${nombreJours} nuit${nombreJours > 1 ? 's' : ''}</p>
+    `;
+
+    // Afficher le message de recommandation si nécessaire
+    if (recommandationDiv) {
+        const totalPersonnes = nbAdultes + parseInt(document.getElementById('enfants0_2').value) + parseInt(document.getElementById('enfants3_12').value) + parseInt(document.getElementById('enfants13_17').value) + parseInt(document.getElementById('personnesSupp').value);
+        if (totalPersonnes > 6) {
+            const nbEmplacements = Math.ceil(totalPersonnes / 6);
+            recommandationDiv.innerHTML = `Pour votre groupe, nous vous recommandons ${nbEmplacements} emplacements`;
+            recommandationDiv.classList.remove('hidden');
+        } else {
+            recommandationDiv.classList.add('hidden');
+        }
+    }
+    
+    resultDiv.classList.remove('hidden');
 }
 
 // Écouteur d'événement pour le formulaire
