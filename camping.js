@@ -105,33 +105,36 @@ function calculerPrix() {
 
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
+        const totalAdultes = nbAdultes + nbPersonnesSupp;
         
         // Pour 7 personnes (6 adultes + 1 enfant) :
         // 1. Nombre d'emplacements = Math.ceil(7/6) = 2 (max 6 personnes par emplacement)
         // 2. Personnes incluses = 2 * 2 = 4 (2 personnes par forfait)
-        // 3. Personnes supplémentaires = 7 - 4 = 3
+        // 3. Personnes supplémentaires adultes = nbAdultes - personnes incluses
         const nbEmplacements = Math.ceil(totalPersonnes / 6);
         const personnesInclusesDansForfaits = nbEmplacements * 2;
-        const personnesSupplementaires = totalPersonnes - personnesInclusesDansForfaits;
+        
+        // On compte d'abord les adultes supplémentaires
+        const adultesSupplementaires = Math.max(0, totalAdultes - personnesInclusesDansForfaits);
         
         // Prix des forfaits (1 forfait par emplacement)
         prixBase = config.emplacementNu.forfaitBase * nombreJours * nbEmplacements;
         
-        // Calcul du prix des enfants
+        // Calcul du prix des enfants (tous les enfants sont comptés au tarif enfant)
         prixEnfants = (
             nbEnfants0_2 * config.emplacementNu.enfants["0-2"] +
             nbEnfants3_12 * config.emplacementNu.enfants["3-12"] +
             nbEnfants13_17 * config.emplacementNu.enfants["13-17"]
         ) * nombreJours;
         
-        // Prix des personnes supplémentaires
-        prixPersonnesSupp = personnesSupplementaires * config.emplacementNu.personneSupplementaire * nombreJours;
+        // Prix des personnes supplémentaires (uniquement les adultes)
+        prixPersonnesSupp = adultesSupplementaires * config.emplacementNu.personneSupplementaire * nombreJours;
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
         
         // Afficher le détail des forfaits
         const detailForfaits = document.getElementById('detail-forfaits');
-        if (nbEmplacements > 1 || personnesSupplementaires > 0) {
+        if (nbEmplacements > 1 || adultesSupplementaires > 0) {
             document.getElementById('nbEmplacements').textContent = nbEmplacements;
             document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacements).toFixed(2) + '€';
             document.getElementById('messageEmplacements').classList.remove('hidden');
@@ -139,8 +142,9 @@ function calculerPrix() {
             
             // Afficher le détail des forfaits et personnes supplémentaires
             detailForfaits.classList.remove('hidden');
+            const totalEnfants = nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17;
             document.getElementById('detailForfaits').textContent = 
-                `${nbEmplacements} forfaits (${personnesInclusesDansForfaits} pers. incluses) + ${personnesSupplementaires} pers. supplémentaires`;
+                `${nbEmplacements} forfaits (${personnesInclusesDansForfaits} pers. incluses) + ${adultesSupplementaires} adultes supp. + ${totalEnfants} enfant(s)`;
         } else {
             detailForfaits.classList.add('hidden');
         }
