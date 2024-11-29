@@ -106,17 +106,17 @@ function calculerPrix() {
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
-        // Calcul du nombre de forfaits (2 personnes par forfait)
-        // Pour 7 personnes : 2 forfaits (4 personnes) + 3 supplémentaires
-        const nbForfaits = Math.floor(totalPersonnes / 2);
+        // Pour 7 personnes, on veut 2 forfaits (4 personnes) et 3 personnes supplémentaires
+        // On divise par 4 et on arrondit au supérieur pour avoir le nombre de forfaits de 2 personnes
+        const nbForfaits = Math.min(2, Math.ceil(totalPersonnes / 4));
         
-        // Nombre de personnes incluses dans les forfaits complets
+        // Nombre de personnes incluses dans les forfaits (2 personnes par forfait)
         const personnesInclusesDansForfaits = nbForfaits * 2;
         
-        // Les personnes supplémentaires sont celles qui dépassent les forfaits complets
+        // Les personnes supplémentaires sont celles qui dépassent les forfaits
         const personnesSupplementaires = totalPersonnes - personnesInclusesDansForfaits;
         
-        // Prix des forfaits complets
+        // Prix des forfaits
         prixBase = config.emplacementNu.forfaitBase * nombreJours * nbForfaits;
         
         // Calcul du prix des enfants
