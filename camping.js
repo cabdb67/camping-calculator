@@ -106,17 +106,17 @@ function calculerPrix() {
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
-        // Calcul du nombre de forfaits nécessaires
-        // Chaque forfait inclut 2 personnes, donc on divise par 2 et on arrondit au supérieur
-        const nbForfaits = Math.ceil(totalPersonnes / 2);
+        // Calcul du nombre de forfaits (2 personnes par forfait)
+        // Pour 7 personnes : 2 forfaits (4 personnes) + 3 supplémentaires
+        const nbForfaits = Math.floor(totalPersonnes / 2);
         
-        // Nombre de personnes incluses dans les forfaits (2 personnes par forfait)
+        // Nombre de personnes incluses dans les forfaits complets
         const personnesInclusesDansForfaits = nbForfaits * 2;
         
-        // Personnes supplémentaires = total - personnes incluses dans les forfaits
-        const personnesSupplementaires = Math.max(0, totalPersonnes - personnesInclusesDansForfaits);
+        // Les personnes supplémentaires sont celles qui dépassent les forfaits complets
+        const personnesSupplementaires = totalPersonnes - personnesInclusesDansForfaits;
         
-        // Prix des forfaits
+        // Prix des forfaits complets
         prixBase = config.emplacementNu.forfaitBase * nombreJours * nbForfaits;
         
         // Calcul du prix des enfants
@@ -126,14 +126,14 @@ function calculerPrix() {
             nbEnfants13_17 * config.emplacementNu.enfants["13-17"]
         ) * nombreJours;
         
-        // Prix des personnes supplémentaires (celles qui dépassent les forfaits)
+        // Prix des personnes supplémentaires
         prixPersonnesSupp = personnesSupplementaires * config.emplacementNu.personneSupplementaire * nombreJours;
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
         
         // Afficher le détail des forfaits
         const detailForfaits = document.getElementById('detail-forfaits');
-        if (nbForfaits > 1) {
+        if (nbForfaits > 1 || personnesSupplementaires > 0) {
             document.getElementById('nbEmplacements').textContent = nbForfaits;
             document.getElementById('prixDivise').textContent = (prixTotal / nbForfaits).toFixed(2) + '€';
             document.getElementById('messageEmplacements').classList.remove('hidden');
