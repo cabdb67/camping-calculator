@@ -106,10 +106,10 @@ function calculerPrix() {
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
-        // Pour 13 personnes :
-        // 1. Nombre d'emplacements = Math.ceil(13/6) = 3 (max 6 personnes par emplacement)
-        // 2. Personnes incluses = 3 * 2 = 6 (2 personnes par forfait)
-        // 3. Personnes supplémentaires = 13 - 6 = 7
+        // Pour 7 personnes (6 adultes + 1 enfant) :
+        // 1. Nombre d'emplacements = Math.ceil(7/6) = 2 (max 6 personnes par emplacement)
+        // 2. Personnes incluses = 2 * 2 = 4 (2 personnes par forfait)
+        // 3. Personnes supplémentaires = 7 - 4 = 3
         const nbEmplacements = Math.ceil(totalPersonnes / 6);
         const personnesInclusesDansForfaits = nbEmplacements * 2;
         const personnesSupplementaires = totalPersonnes - personnesInclusesDansForfaits;
