@@ -17,6 +17,14 @@ function getConfig() {
     };
 }
 
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    // Cacher les messages au démarrage
+    document.getElementById('messageEmplacements').classList.add('hidden');
+    document.getElementById('prixParEmplacement').classList.add('hidden');
+    document.getElementById('resultat').classList.add('hidden');
+});
+
 // Calcul du nombre de jours
 function getNombreJours(dateDebut, dateFin) {
     const debut = new Date(dateDebut);
@@ -78,15 +86,15 @@ function calculerPrix() {
     document.getElementById('dateFinSejour').textContent = formatDate(dateDepart);
     document.getElementById('nombreNuits').textContent = nombreJours;
     
+    // Cacher les messages de recommandation par défaut
+    document.getElementById('messageEmplacements').classList.add('hidden');
+    document.getElementById('prixParEmplacement').classList.add('hidden');
+    
     if (estRandonneur) {
         // Pour un randonneur : tarif unique + options
         prixBase = config.emplacementNu.randonneur * nombreJours;
         prixTotal = prixBase;
         nbAdultes = 1; // Un seul adulte pour le tarif randonneur
-        
-        // Cacher les messages d'emplacements pour les randonneurs
-        document.getElementById('messageEmplacements').classList.add('hidden');
-        document.getElementById('prixParEmplacement').classList.add('hidden');
     } else {
         // Calcul standard
         nbAdultes = parseInt(document.getElementById('adultes').value) || 0;
@@ -113,19 +121,13 @@ function calculerPrix() {
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
         
-        // Gestion du message d'emplacements multiples
-        const messageEmplacements = document.getElementById('messageEmplacements');
-        const prixParEmplacement = document.getElementById('prixParEmplacement');
-        
+        // Afficher le message de recommandation uniquement si plus de 6 personnes
         if (totalPersonnes > 6) {
             const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
             document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
-            messageEmplacements.classList.remove('hidden');
-            prixParEmplacement.classList.remove('hidden');
             document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacementsNecessaires).toFixed(2) + '€';
-        } else {
-            messageEmplacements.classList.add('hidden');
-            prixParEmplacement.classList.add('hidden');
+            document.getElementById('messageEmplacements').classList.remove('hidden');
+            document.getElementById('prixParEmplacement').classList.remove('hidden');
         }
     }
     
