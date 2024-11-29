@@ -99,14 +99,18 @@ function calculerPrix() {
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
         // Gestion du message d'emplacements multiples
+        const messageEmplacements = document.getElementById('messageEmplacements');
+        const prixParEmplacement = document.getElementById('prixParEmplacement');
+        
         if (totalPersonnes > 6) {
             const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
             document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
-            document.getElementById('messageEmplacements').classList.remove('hidden');
-            document.getElementById('prixParEmplacement').classList.remove('hidden');
+            messageEmplacements.classList.remove('hidden');
+            prixParEmplacement.classList.remove('hidden');
+            document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacementsNecessaires).toFixed(2) + '€';
         } else {
-            document.getElementById('messageEmplacements').classList.add('hidden');
-            document.getElementById('prixParEmplacement').classList.add('hidden');
+            messageEmplacements.classList.add('hidden');
+            prixParEmplacement.classList.add('hidden');
         }
         
         // Calcul du prix de base (forfait 1-2 personnes)
@@ -158,7 +162,7 @@ function calculerPrix() {
     document.getElementById('prixTotal').textContent = prixTotal.toFixed(2) + '€';
 
     // Afficher le résultat
-    document.getElementById('result').classList.remove('hidden');
+    document.getElementById('resultat').classList.remove('hidden');
 }
 
 // Écouteur d'événement pour le formulaire
