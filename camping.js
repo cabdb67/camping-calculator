@@ -98,21 +98,6 @@ function calculerPrix() {
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
-        // Gestion du message d'emplacements multiples
-        const messageEmplacements = document.getElementById('messageEmplacements');
-        const prixParEmplacement = document.getElementById('prixParEmplacement');
-        
-        if (totalPersonnes > 6) {
-            const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
-            document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
-            messageEmplacements.classList.remove('hidden');
-            prixParEmplacement.classList.remove('hidden');
-            document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacementsNecessaires).toFixed(2) + '€';
-        } else {
-            messageEmplacements.classList.add('hidden');
-            prixParEmplacement.classList.add('hidden');
-        }
-        
         // Calcul du prix de base (forfait 1-2 personnes)
         prixBase = config.emplacementNu.forfaitBase * nombreJours;
         
@@ -127,6 +112,21 @@ function calculerPrix() {
         prixPersonnesSupp = nbPersonnesSupp * config.emplacementNu.personneSupplementaire * nombreJours;
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
+        
+        // Gestion du message d'emplacements multiples
+        const messageEmplacements = document.getElementById('messageEmplacements');
+        const prixParEmplacement = document.getElementById('prixParEmplacement');
+        
+        if (totalPersonnes > 6) {
+            const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
+            document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
+            messageEmplacements.classList.remove('hidden');
+            prixParEmplacement.classList.remove('hidden');
+            document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacementsNecessaires).toFixed(2) + '€';
+        } else {
+            messageEmplacements.classList.add('hidden');
+            prixParEmplacement.classList.add('hidden');
+        }
     }
     
     // Ajout du prix de l'électricité
