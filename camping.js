@@ -106,14 +106,8 @@ function calculerPrix() {
         // Calcul du nombre total de personnes
         const totalPersonnes = nbAdultes + nbEnfants0_2 + nbEnfants3_12 + nbEnfants13_17 + nbPersonnesSupp;
         
-        // Calcul du nombre d'emplacements nécessaires
-        let nbEmplacementsNecessaires = 1;
-        if (totalPersonnes > 6) {
-            nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
-            document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
-            document.getElementById('messageEmplacements').classList.remove('hidden');
-            document.getElementById('prixParEmplacement').classList.remove('hidden');
-        }
+        // Calcul du nombre d'emplacements nécessaires (6 personnes max par emplacement)
+        const nbEmplacementsNecessaires = Math.ceil(totalPersonnes / 6);
         
         // Le prix de base est multiplié par le nombre d'emplacements nécessaires
         prixBase = config.emplacementNu.forfaitBase * nombreJours * nbEmplacementsNecessaires;
@@ -130,8 +124,12 @@ function calculerPrix() {
 
         prixTotal = prixBase + prixEnfants + prixPersonnesSupp;
         
-        if (totalPersonnes > 6) {
+        // Afficher le message de recommandation si plus d'un emplacement est nécessaire
+        if (nbEmplacementsNecessaires > 1) {
+            document.getElementById('nbEmplacements').textContent = nbEmplacementsNecessaires;
             document.getElementById('prixDivise').textContent = (prixTotal / nbEmplacementsNecessaires).toFixed(2) + '€';
+            document.getElementById('messageEmplacements').classList.remove('hidden');
+            document.getElementById('prixParEmplacement').classList.remove('hidden');
         }
     }
     
