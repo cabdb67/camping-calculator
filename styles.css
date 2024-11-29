@@ -196,6 +196,10 @@ input[type="number"]:focus {
     font-style: italic;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {
